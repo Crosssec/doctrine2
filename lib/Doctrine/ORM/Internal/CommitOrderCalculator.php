@@ -153,7 +153,12 @@ class CommitOrderCalculator
     {
         $vertex->state = self::IN_PROGRESS;
 
-        foreach ($vertex->dependencyList as $edge) {
+        $dependencyList = $vertex->dependencyList;
+        usort($dependencyList, function ($a, $b) {
+            return $b->weight <=> $a->weight;
+        });
+
+        foreach ($dependencyList as $edge) {
             $adjacentVertex = $this->nodeList[$edge->to];
 
             switch ($adjacentVertex->state) {
